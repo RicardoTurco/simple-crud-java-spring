@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  postgresql:
+    image: docker.io/bitnami/postgresql:11-debian-10
+    ports:
+      - "8889:5432"
+    volumes:
+      - "postgresql_data:/bitnami/postgresql"
+    environment:
+      POSTGRES_PASSWORD: 1234
+    container_name: db_postgres
+    restart: always
+    networks:
+      - postgres-compose-network
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root123
+    ports:
+      - "15432:80"
+    networks:
+      - postgres-compose-network
+
+volumes:
+  postgresql_data:
+    driver: local
+
+networks:
+  postgres-compose-network:
+    driver: bridge
